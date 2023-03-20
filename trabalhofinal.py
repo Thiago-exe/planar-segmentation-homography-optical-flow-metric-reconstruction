@@ -11,6 +11,9 @@ img2 = cv2.imread(r'D:/Python/Nova pasta/WhatsApp Image 2023-03-16 at 21.44.00.j
 gray1 = cv2.cvtColor(img1,cv2.COLOR_BGR2GRAY)
 gray2 = cv2.cvtColor(img2,cv2.COLOR_BGR2GRAY)
 
+gray1 = cv2.GaussianBlur(gray1, (5, 5), 0.5)
+gray2 = cv2.GaussianBlur(gray2, (5, 5), 0.5)
+
 # Definir os parâmetros para o detector de Harris
 block_size = 2
 ksize = 3
