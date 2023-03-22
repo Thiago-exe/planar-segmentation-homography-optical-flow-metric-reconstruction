@@ -25,7 +25,6 @@ for i in range(num_octaves):
         blurred = cv2.GaussianBlur(gray1, ksize, 0)
         octave.append(blurred)
     gaussian_pyramid.append(octave)
-    # downsample the image by half for the next octave
     gray1 = blurred
 
 
@@ -37,12 +36,36 @@ for i in range(num_octaves):
         blurred = cv2.GaussianBlur(gray2, ksize, 0)
         octave.append(blurred)
     gaussian_pyramid2.append(octave)
-    # downsample the image by half for the next octave
+    # 
     gray2 = blurred
 
 # display the Gaussian pyramid
 cv2.imshow('gaussian 2', gray2)
 cv2.imshow('gaussian 1', gray1)
+
+# apply Difference of Gaussians (DoG)
+dog_pyramid = []
+dog_pyramid2 = []
+
+for i in range(num_octaves):
+    octave = []
+    for j in range(num_levels-1):
+        # subtract adjacent levels of the Gaussian pyramid to obtain the difference
+        dog = cv2.subtract(gaussian_pyramid[i][j], gaussian_pyramid[i][j+1])
+        octave.append(dog)
+    dog_pyramid.append(octave)
+
+for i in range(num_octaves):
+    octave = []
+    for j in range(num_levels-1):
+        # subtract adjacent levels of the Gaussian pyramid to obtain the difference
+        dog = cv2.subtract(gaussian_pyramid2[i][j], gaussian_pyramid2[i][j+1])
+        octave.append(dog)
+    dog_pyramid2.append(octave)
+
+
+cv2.imshow('DoG 2', dog_pyramid2[0][0])
+cv2.imshow('DoG 1', dog_pyramid[0][0])
 
 # Initialize SIFT detector
 sift = cv2.SIFT_create()
@@ -51,8 +74,10 @@ sift = cv2.SIFT_create()
 kp1, des1 = sift.detectAndCompute(gray1, None)
 kp2, des2 = sift.detectAndCompute(gray2, None)
 
-img1 = cv2.drawKeypoints(gray1,kp1,img1)
-cv2.imshow('keypoints', img1)
+cv2.drawKeypoints(img1,kp1,img1)
+cv2.drawKeypoints(img2,kp2,img2)
+cv2.imshow('keypoints 1', img1)
+cv2.imshow('keypoints 2', img2)
 
 
 # Display image
