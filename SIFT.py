@@ -43,30 +43,6 @@ for i in range(num_octaves):
 cv2.imshow('gaussian 2', gray2)
 cv2.imshow('gaussian 1', gray1)
 
-# apply Difference of Gaussians (DoG)
-dog_pyramid = []
-dog_pyramid2 = []
-
-for i in range(num_octaves):
-    octave = []
-    for j in range(num_levels-1):
-        # subtract adjacent levels of the Gaussian pyramid to obtain the difference
-        dog = cv2.subtract(gaussian_pyramid[i][j], gaussian_pyramid[i][j+1])
-        octave.append(dog)
-    dog_pyramid.append(octave)
-
-for i in range(num_octaves):
-    octave = []
-    for j in range(num_levels-1):
-        # subtract adjacent levels of the Gaussian pyramid to obtain the difference
-        dog = cv2.subtract(gaussian_pyramid2[i][j], gaussian_pyramid2[i][j+1])
-        octave.append(dog)
-    dog_pyramid2.append(octave)
-
-
-cv2.imshow('DoG 2', dog_pyramid2[0][0])
-cv2.imshow('DoG 1', dog_pyramid[0][0])
-
 # Initialize SIFT detector
 sift = cv2.SIFT_create()
 
